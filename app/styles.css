@@ -77,8 +77,8 @@ body:before {
   gap: 24px;
 }
 .nav-actions { display: flex; align-items: center; gap: 10px; }
-.language { display: flex; align-items: center; padding: 0 5px; }
-.language button { width: 36px; height: 32px; border: 1px solid #303849; border-radius: 8px; background: rgba(12,16,24,.76); color: #f1f4fa; font: 650 11px ui-monospace,monospace; cursor: pointer; transition: border-color .2s,background .2s,color .2s; }
+.language { display: flex; align-items: center; }
+.language button { min-width: 46px; height: 40px; padding: 0 12px; border: 1px solid #303849; border-radius: 9px; background: rgba(12,16,24,.76); color: #f1f4fa; font: 650 12px ui-monospace,monospace; cursor: pointer; transition: border-color .2s,background .2s,color .2s; }
 .language button:hover { color: var(--blue); border-color: #52658d; background: #111725; }
 .nav a {
   color: #adb5c2;
@@ -91,6 +91,9 @@ footer a:hover {
   color: white;
 }
 .nav-cta {
+  height: 40px;
+  display: inline-flex;
+  align-items: center;
   border: 1px solid #343b49;
   border-radius: 9px;
   padding: 9px 15px;
@@ -98,6 +101,10 @@ footer a:hover {
   color: white !important;
   box-shadow: inset 0 1px rgba(255, 255, 255, 0.08);
 }
+.dot-grid-section { position: relative; isolation: isolate; overflow: hidden; }
+.dot-grid-section > :not(.section-dot-grid) { position: relative; z-index: 1; }
+.section-dot-grid { position: absolute; inset: 0; z-index: 0; opacity: .34; mask-image: linear-gradient(to bottom,transparent 0,black 16%,black 84%,transparent 100%); }
+.section-dot-grid canvas { display: block; width: 100%; height: 100%; }
 .menu {
   display: none;
   background: none;

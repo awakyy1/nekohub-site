@@ -47,7 +47,7 @@ export function translatePage(root, locale){
   if(!root) return; const table=locale==="pt"?pt:locale==="ja"?ja:null;
   const walker=document.createTreeWalker(root,NodeFilter.SHOW_TEXT);
   while(walker.nextNode()){
-    const node=walker.currentNode; if(!originals.has(node)) originals.set(node,node.nodeValue);
+    const node=walker.currentNode; if(node.parentElement?.closest("[data-no-translate]")) continue; if(!originals.has(node)) originals.set(node,node.nodeValue);
     const original=originals.get(node), key=original.trim();
     if(!key) continue; const value=table?.[key] ?? key;
     node.nodeValue=original.replace(key,value);

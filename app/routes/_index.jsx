@@ -5,6 +5,7 @@ import { fallbackContent } from "../content/fallback";
 import { languageLabels, translatePage } from "../content/translations";
 import GradientWaves from "../components/GradientWaves";
 import DotField from "../components/DotField";
+import DotGrid from "../components/DotGrid";
 
 const content = { ...fallbackContent, ...(generated || {}) };
 const renderHosts = [
@@ -22,7 +23,7 @@ function Arrow(){ return <span aria-hidden="true">↗</span>; }
 function LanguagePicker({locale,onChange}){
   const locales=["en","pt","ja"];
   const next=()=>onChange(locales[(locales.indexOf(locale)+1)%locales.length]);
-  return <div className="language"><button aria-label={`${languageLabels[locale]}. Change language`} onClick={next}>{locale==="ja"?"JP":locale.toUpperCase()}</button></div>;
+  return <div className="language"><button data-no-translate aria-label={`${languageLabels[locale]}. Change language`} onClick={next}>{locale==="ja"?"JP":locale.toUpperCase()}</button></div>;
 }
 
 function SoftwareRender(){
@@ -120,11 +121,12 @@ export default function Index(){
         <SoftwareRender/>
       </section>
 
-      <section id="install" className="install" data-reveal><div className="install-copy"><p className="section-kicker">Up and running</p><h2>One command.<br/>Your fleet, in view.</h2><p>Install the current release from the official APT repository. nekoHub is open source and built in public.</p><div className="install-links"><a href="https://awakyy1.github.io/nekohub" target="_blank" rel="noreferrer">APT repository <Arrow/></a><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Read the source <Arrow/></a></div></div><button className="command" onClick={copy} aria-label="Copy install command"><span className="prompt">$</span><code>{content.install}</code><span className={copied?"copy copied":"copy"}>{copied?"Copied":"Copy"}</span></button></section>
+      <section id="install" className="install dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><div className="install-copy"><p className="section-kicker">Up and running</p><h2>One command.<br/>Your fleet, in view.</h2><p>Install the current release from the official APT repository. nekoHub is open source and built in public.</p><div className="install-links"><a href="https://awakyy1.github.io/nekohub" target="_blank" rel="noreferrer">APT repository <Arrow/></a><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Read the source <Arrow/></a></div></div><button className="command" onClick={copy} aria-label="Copy install command"><span className="prompt">$</span><code>{content.install}</code><span className={copied?"copy copied":"copy"}>{copied?"Copied":"Copy"}</span></button></section>
 
       <StoryCarousel/>
 
-      <section id="agent" className="agent-section" data-reveal>
+      <section id="agent" className="agent-section dot-grid-section" data-reveal>
+        <DotGrid className="section-dot-grid"/>
         <div className="agent-copy"><p className="section-kicker">nekoHub agent</p><h2>A quiet Linux service that does one job well.</h2><p>It reads native system signals, keeps a short local history, and serves the TUI without root privileges. No permanent SSH polling loop, no heavy runtime.</p><a href="https://github.com/awakyy1/nekohub/tree/main/crates/nekohub-agent" target="_blank" rel="noreferrer">Explore the agent source <Arrow/></a></div>
         <div className="agent-panel">
           <div className="agent-panel-head"><span><i/> nekohub-agent.service</span><b>active (running)</b></div>
@@ -137,7 +139,7 @@ export default function Index(){
 
       <AdaptiveDemo/>
 
-      <section id="architecture" className="architecture" data-reveal><div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div><div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div></section>
+      <section id="architecture" className="architecture dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div><div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div></section>
 
       <section className="final-cta" data-reveal><span className="big-cat">(^._.^)</span><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
     </main>
