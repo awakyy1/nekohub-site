@@ -3,6 +3,8 @@ import { Link } from "@remix-run/react";
 import generated from "../content/generated";
 import { fallbackContent } from "../content/fallback";
 import { languageLabels, translatePage } from "../content/translations";
+import GradientWaves from "../components/GradientWaves";
+import DotField from "../components/DotField";
 
 const content = { ...fallbackContent, ...(generated || {}) };
 const machines = [
@@ -41,6 +43,47 @@ function Terminal(){
   </div>;
 }
 
+const demoSizes = [
+  { id: "compact", label: "44 cols", value: "44 × 24" },
+  { id: "medium", label: "88 cols", value: "88 × 30" },
+  { id: "wide", label: "132 cols", value: "132 × 40" }
+];
+
+function RealApp(){
+  return <div className="real-app" aria-label="nekoHub real application layout">
+    <div className="real-app-head"><span><b>(^._.^)</b> neko<span>Hub</span></span><nav><i>[1] Home</i><i>[2] Machines</i><i>[3] Settings</i></nav></div>
+    <div className="real-machines"><small>machines 4</small><span>● local</span><span>○ edge-01</span><span>○ media</span><span>○ backup</span></div>
+    <div className="real-grid">
+      <article><strong>◆ local</strong><span>1 machine</span><em>● local · ready</em></article>
+      <article><strong>◆ Production</strong><span>2 machines</span><em>● group ready</em></article>
+      <article><strong>◆ Homelab</strong><span>2 machines</span><em>● group ready</em></article>
+      <article className="add"><strong>+ New group</strong><span>Create a machine group</span><em>Enter to add</em></article>
+    </div>
+    <div className="real-app-foot">Tab header/cards · ←→ browse · Enter open · m machines · s settings · q quit</div>
+  </div>;
+}
+
+function AdaptiveDemo(){
+  const [size,setSize]=useState("wide");
+  useEffect(()=>{
+    if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
+    const id=setInterval(()=>setSize(current=>demoSizes[(demoSizes.findIndex(item=>item.id===current)+1)%demoSizes.length].id),3000);
+    return()=>clearInterval(id);
+  },[]);
+  const current=demoSizes.find(item=>item.id===size);
+  return <section id="live-demo" className="adaptive-demo" data-reveal>
+    <div className="section-heading"><div><p className="section-kicker">The real application</p><h2>One TUI.<br/>Every terminal size.</h2></div><p>The interface follows the real Ratatui layout: cards reorganize as the terminal changes, keeping every action clear from a compact pane to a full-screen session.</p></div>
+    <div className="size-controls" aria-label="Terminal size"><span>Resize the terminal</span>{demoSizes.map(item=><button key={item.id} className={size===item.id?"active":""} onClick={()=>setSize(item.id)}>{item.label}</button>)}</div>
+    <div className="adaptive-stage">
+      <div className={`adaptive-window ${size}`}>
+        <div className="window-bar"><span><i/><i/><i/></span><b>nekohub — {current.value}</b><em>live layout</em></div>
+        <RealApp/>
+        <span className="resize-grip" aria-hidden="true">⌟</span>
+      </div>
+    </div>
+  </section>;
+}
+
 export default function Index(){
   const [copied,setCopied]=useState(false); const [menu,setMenu]=useState(false); const [locale,setLocale]=useState("en"); const root=useRef(null);
   const copy=()=>{ navigator.clipboard?.writeText(content.install); setCopied(true); setTimeout(()=>setCopied(false),1800); };
@@ -48,10 +91,11 @@ export default function Index(){
   useEffect(()=>{document.documentElement.lang=locale==="pt"?"pt-BR":locale;localStorage.setItem("nekohub-locale",locale);translatePage(root.current,locale)},[locale]);
   useEffect(()=>{ const els=[...document.querySelectorAll("[data-reveal]")]; const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("revealed")),{threshold:.14}); els.forEach(e=>obs.observe(e)); return()=>obs.disconnect(); },[]);
   return <div id="top" className="site-shell" ref={root}>
-    <nav className="nav"><Logo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#architecture">Architecture</a><a href="#roadmap">Roadmap</a><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>≡</button></nav>
+    <nav className="nav"><DotField className="nav-dots"/><Logo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#agent">Agent</a><a href="#architecture">Architecture</a><a href="#roadmap">Roadmap</a><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>≡</button></nav>
 
     <main>
       <section className="hero">
+        <GradientWaves className="hero-waves"/>
         <div className="hero-copy"><a className="announcement" href="#install"><i/>{content.announcement}<span>→</span></a><p className="eyebrow">{content.eyebrow}</p><h1>{content.title.split("\n").map((line,i)=><span key={line} className={i?"accent-line":""}>{line}</span>)}</h1><p className="hero-intro">{content.intro}</p><div className="hero-actions"><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">View on GitHub <Arrow/></a></div></div>
         <Terminal/>
       </section>
@@ -60,9 +104,22 @@ export default function Index(){
 
       <section id="product" className="statement" data-reveal><p className="section-kicker">01 / Why nekoHub</p><h2>Fleet visibility should feel <em>instant</em>, not like another platform to operate.</h2><p>nekoHub keeps the experience local, tactile, and fast. One terminal becomes the calm surface between you and every Linux machine you care about.</p></section>
 
+      <AdaptiveDemo/>
+
       <section className="feature-stage" data-reveal>
         <div className="section-heading"><div><p className="section-kicker">Built for the command line</p><h2>Native signals.<br/>No dashboard tax.</h2></div><p>The nekoHub agent reads Linux directly. Metrics stay lightweight, structured, and available without a permanent SSH polling loop.</p></div>
         <div className="feature-grid"><article className="feature wide"><div className="feature-no">01</div><div className="proc-card"><div><span>/proc/loadavg</span><b>0.42 &nbsp; 0.31 &nbsp; 0.28</b></div><div><span>/sys/class/thermal</span><b>42.0°C</b></div><div><span>/proc/meminfo</span><b>4.2 GB free</b></div></div><h3>Linux-native telemetry</h3><p>Direct reads from <code>/proc</code> and <code>/sys</code> keep the agent transparent and efficient.</p></article><article className="feature"><div className="feature-no">02</div><div className="socket-art"><span>nekoHub</span><i>↔</i><span>agent.sock</span></div><h3>Local by default</h3><p>A Unix socket keeps host communication close, predictable, and easy to reason about.</p></article><article className="feature"><div className="feature-no">03</div><div className="prom-art"><span>GET /metrics</span><b>200 OK</b><code>nekohub_cpu 0.18</code></div><h3>Prometheus ready</h3><p>Use nekoHub's focused TUI and keep the monitoring stack you already trust.</p></article></div>
+      </section>
+
+      <section id="agent" className="agent-section" data-reveal>
+        <div className="agent-copy"><p className="section-kicker">nekoHub agent</p><h2>A quiet Linux service that does one job well.</h2><p>It reads native system signals, keeps a short local history, and serves the TUI without root privileges. No permanent SSH polling loop, no heavy runtime.</p><a href="https://github.com/awakyy1/nekohub/tree/main/crates/nekohub-agent" target="_blank" rel="noreferrer">Explore the agent source <Arrow/></a></div>
+        <div className="agent-panel">
+          <div className="agent-panel-head"><span><i/> nekohub-agent.service</span><b>active (running)</b></div>
+          <div className="agent-step"><small>01 · COLLECT</small><strong>/proc + /sys</strong><span>CPU · memory · disk · load · network</span></div>
+          <div className="agent-pulse"><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/><i/></div>
+          <div className="agent-step"><small>02 · SERVE</small><strong>/run/nekohub/agent.sock</strong><span>read-only · no root · 1 second samples</span></div>
+          <div className="agent-step final"><small>03 · EXPORT</small><strong>127.0.0.1:9876/metrics</strong><span>Prometheus compatible · optional by design</span></div>
+        </div>
       </section>
 
       <section id="architecture" className="architecture" data-reveal><div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div><div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div></section>
@@ -75,6 +132,6 @@ export default function Index(){
 
       <section className="final-cta" data-reveal><span className="big-cat">(^._.^)</span><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
     </main>
-    <footer><Logo/><div><a href="https://github.com/awakyy1/nekohub">GitHub</a><a href="https://awakyy1.github.io/nekohub">APT</a><a href="#top">Back to top ↑</a></div></footer>
+    <footer><DotField className="footer-dots"/><Logo/><div><a href="https://github.com/awakyy1/nekohub">GitHub</a><a href="https://awakyy1.github.io/nekohub">APT</a><a href="#top">Back to top ↑</a></div></footer>
   </div>;
 }
