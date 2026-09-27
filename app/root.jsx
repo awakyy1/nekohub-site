@@ -3,7 +3,7 @@ import stylesheet from "./styles.css?url";
 
 export const links = () => [{ rel: "stylesheet", href: stylesheet }];
 export const meta = () => [
-  { title: "nekoHub — Linux fleet management, designed for the terminal" },
+  { title: "nekoHub | Linux fleet management for the terminal" },
   { name: "description", content: "A fast, open source TUI for monitoring and managing Linux machines from one calm terminal workspace." }
 ];
 
