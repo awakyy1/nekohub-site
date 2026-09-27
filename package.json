@@ -1,0 +1,21 @@
+{
+  "name": "nekohub-site",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "remix vite:dev",
+    "content:sync": "node scripts/sync-content.mjs",
+    "build": "npm run content:sync && remix vite:build",
+    "start": "vite preview"
+  },
+  "dependencies": {
+    "@remix-run/react": "^2.17.0",
+    "@remix-run/dev": "^2.17.0",
+    "@vitejs/plugin-react": "^4.4.1",
+    "vite": "^6.3.5",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1",
+    "isbot": "^5.1.27"
+  },
+  "devDependencies": {}
+}
