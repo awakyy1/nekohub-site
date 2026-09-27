@@ -1,4 +1,5 @@
 import { useEffect, useRef, useState } from "react";
+import { Link } from "@remix-run/react";
 import generated from "../content/generated";
 import { fallbackContent } from "../content/fallback";
 import { languageLabels, translatePage } from "../content/translations";
@@ -15,12 +16,8 @@ function Logo(){ return <a className="logo" href="#top" aria-label="nekoHub home
 function Arrow(){ return <span aria-hidden="true">↗</span>; }
 
 function LanguagePicker({locale,onChange}){
-  const [open,setOpen]=useState(false); const ref=useRef(null);
-  useEffect(()=>{const close=e=>!ref.current?.contains(e.target)&&setOpen(false);document.addEventListener("pointerdown",close);return()=>document.removeEventListener("pointerdown",close)},[]);
-  return <div className="language" ref={ref}><button className="language-button" onClick={()=>setOpen(!open)} aria-haspopup="listbox" aria-expanded={open}><span>◎</span>{locale.toUpperCase()}<i>⌄</i></button>{open&&<div className="language-menu" role="listbox">{Object.entries(languageLabels).map(([id,label])=><button key={id} role="option" aria-selected={id===locale} onClick={()=>{onChange(id);setOpen(false)}}><span>{id==="ja"?"JP":id.toUpperCase()}</span>{label}<i>{id===locale?"✓":""}</i></button>)}</div>}</div>;
+  return <div className="language" aria-label="Language">{Object.keys(languageLabels).map(id=><button key={id} className={id===locale?"active":""} aria-label={languageLabels[id]} aria-pressed={id===locale} onClick={()=>onChange(id)}>{id==="ja"?"JP":id.toUpperCase()}</button>)}</div>;
 }
-
-function ThemeShop(){ return <section id="themes" className="theme-shop" data-reveal><div className="theme-copy"><p className="section-kicker">Personalize your terminal</p><h2>A theme shop,<br/><em>made by the community.</em></h2><p>Discover palettes crafted for long sessions, share your own, and make every fleet feel like home.</p><span className="coming-soon"><i/>COMING SOON</span></div><div className="theme-preview"><div className="theme-preview-head"><span>THEME PREVIEW</span><b>03</b></div>{["Midnight Mint","Violet Static","Arctic Blue"].map((name,i)=><div className={`theme-row theme-${i}`} key={name}><div className="theme-swatches"><i/><i/><i/><i/></div><strong>{name}</strong><span>{i===0?"(^._.^)":"○"}</span></div>)}</div></section>; }
 
 function Terminal(){
   const [active, setActive] = useState(0);
@@ -51,7 +48,7 @@ export default function Index(){
   useEffect(()=>{document.documentElement.lang=locale==="pt"?"pt-BR":locale;localStorage.setItem("nekohub-locale",locale);translatePage(root.current,locale)},[locale]);
   useEffect(()=>{ const els=[...document.querySelectorAll("[data-reveal]")]; const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("revealed")),{threshold:.14}); els.forEach(e=>obs.observe(e)); return()=>obs.disconnect(); },[]);
   return <div id="top" className="site-shell" ref={root}>
-    <nav className="nav"><Logo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#architecture">Architecture</a><a href="#roadmap">Roadmap</a><a href="#themes">Theme Shop</a><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>≡</button></nav>
+    <nav className="nav"><Logo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#architecture">Architecture</a><a href="#roadmap">Roadmap</a><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>≡</button></nav>
 
     <main>
       <section className="hero">
@@ -71,8 +68,6 @@ export default function Index(){
       <section id="architecture" className="architecture" data-reveal><div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div><div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div></section>
 
       <section id="roadmap" className="roadmap" data-reveal><div className="section-heading"><div><p className="section-kicker">Now and next</p><h2>Useful today.<br/>Built for the long run.</h2></div><span className="version">CURRENT · v0.3.1</span></div><div className="roadmap-columns"><div><h3>Shipping now</h3>{["Local host monitoring","Machine inventory","Persistent groups","Prometheus metrics","Native /proc and /sys reads","APT installation"].map(x=><p key={x}><i>✓</i>{x}</p>)}</div><div className="future"><h3>On the horizon</h3>{["Secure remote agent pairing","Docker and Podman","Services and logs","Custom themes","Community theme store"].map((x,i)=><p key={x}><span>{String(i+1).padStart(2,"0")}</span>{x}</p>)}</div></div></section>
-
-      <ThemeShop/>
 
       <section className="audience" data-reveal><p className="section-kicker">Made for people who run things</p><div className="audience-grid"><h2>From one quiet homelab to a fleet of restless VPSs.</h2><div>{[["Sysadmins","See every host without leaving the terminal."],["Homelabbers","Keep the lab organized, legible, and fun."],["DevOps + SRE","Inspect faster and stay compatible with existing observability."],["Terminal people","Use an interface that respects your keyboard and attention."]].map(([t,p])=><article key={t}><h3>{t}</h3><p>{p}</p></article>)}</div></div></section>
 
