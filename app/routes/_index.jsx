@@ -127,7 +127,7 @@ export default function Index(){
 
       <section id="agent" className="agent-section dot-grid-section" data-reveal>
         <DotGrid className="section-dot-grid"/>
-        <div className="agent-copy"><p className="section-kicker">nekoHub agent</p><h2>A quiet Linux service that does one job well.</h2><p>It reads native system signals, keeps a short local history, and serves the TUI without root privileges. No permanent SSH polling loop, no heavy runtime.</p><a href="https://github.com/awakyy1/nekohub/tree/main/crates/nekohub-agent" target="_blank" rel="noreferrer">Explore the agent source <Arrow/></a></div>
+        <div className="agent-copy"><p className="section-kicker">nekoHub agent</p><h2>The Nekohub Agent</h2><p>It reads native system signals, keeps a short local history, and serves the TUI without root privileges. No permanent SSH polling loop, no heavy runtime.</p><a href="https://github.com/awakyy1/nekohub/tree/main/crates/nekohub-agent" target="_blank" rel="noreferrer">Explore the agent source <Arrow/></a></div>
         <div className="agent-panel">
           <div className="agent-panel-head"><span><i/> nekohub-agent.service</span><b>active (running)</b></div>
           <div className="agent-step"><small>01 · COLLECT</small><strong>/proc + /sys</strong><span>CPU · memory · disk · load · network</span></div>
