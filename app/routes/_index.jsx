@@ -18,7 +18,9 @@ function Logo(){ return <a className="logo" href="#top" aria-label="nekoHub home
 function Arrow(){ return <span aria-hidden="true">↗</span>; }
 
 function LanguagePicker({locale,onChange}){
-  return <div className="language" aria-label="Language">{Object.keys(languageLabels).map(id=><button key={id} className={id===locale?"active":""} aria-label={languageLabels[id]} aria-pressed={id===locale} onClick={()=>onChange(id)}>{id==="ja"?"JP":id.toUpperCase()}</button>)}</div>;
+  const locales=["en","pt","ja"];
+  const next=()=>onChange(locales[(locales.indexOf(locale)+1)%locales.length]);
+  return <div className="language"><button aria-label={`${languageLabels[locale]}. Change language`} onClick={next}>{locale==="ja"?"JP":locale.toUpperCase()}</button></div>;
 }
 
 function Terminal(){
