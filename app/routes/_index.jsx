@@ -46,11 +46,11 @@ function SoftwareRender(){
 
 function StoryCarousel(){
   const [slide,setSlide]=useState(0);
-  const previous=()=>setSlide(current=>(current+1)%2);
-  const next=()=>setSlide(current=>(current+1)%2);
+  const previous=()=>setSlide(current=>current===0?2:current-1);
+  const next=()=>setSlide(current=>(current+1)%3);
   return <section id="product" className="story-carousel" data-reveal aria-label="Why nekoHub and who it is for">
     <div className="story-viewport" aria-live="polite">
-      <div className="story-track" style={{transform:`translateX(-${slide*50}%)`}}>
+      <div className="story-track" style={{transform:`translateX(-${slide*(100/3)}%)`}}>
         <article className="story-slide why-slide">
           <p className="section-kicker">01 / Why nekoHub</p>
           <h2>Fleet visibility should feel <em>instant</em>, not like another platform to operate.</h2>
@@ -60,9 +60,13 @@ function StoryCarousel(){
           <div><p className="section-kicker">Made for people who run things</p><h2>From one quiet homelab to a fleet of restless VPSs.</h2></div>
           <div className="people-list">{[["Sysadmins","See every host without leaving the terminal."],["Homelabbers","Keep the lab organized, legible, and fun."],["DevOps + SRE","Inspect faster and stay compatible with existing observability."],["Terminal people","Use an interface that respects your keyboard and attention."]].map(([title,copy])=><div key={title}><h3>{title}</h3><p>{copy}</p></div>)}</div>
         </article>
+        <article className="story-slide command-slide">
+          <div><p className="section-kicker">Built for the command line</p><h2>Native signals.<br/>No dashboard tax.</h2><p>The nekoHub agent reads Linux directly. Metrics stay lightweight, structured, and available without a permanent SSH polling loop.</p></div>
+          <div className="signal-stack"><div><span>/proc + /sys</span><strong>Linux-native telemetry</strong></div><div><span>agent.sock</span><strong>Local by default</strong></div><div><span>GET /metrics</span><strong>Prometheus ready</strong></div></div>
+        </article>
       </div>
     </div>
-    <div className="story-controls"><button onClick={previous} aria-label="Previous slide">←</button><span>0{slide+1} / 02</span><div>{[0,1].map(index=><button key={index} className={slide===index?"active":""} onClick={()=>setSlide(index)} aria-label={`Show slide ${index+1}`}/>)}</div><button onClick={next} aria-label="Next slide">→</button></div>
+    <div className="story-controls"><button onClick={previous} aria-label="Previous slide">←</button><span>0{slide+1} / 03</span><div>{[0,1,2].map(index=><button key={index} className={slide===index?"active":""} onClick={()=>setSlide(index)} aria-label={`Show slide ${index+1}`}/>)}</div><button onClick={next} aria-label="Next slide">→</button></div>
   </section>;
 }
 
@@ -86,11 +90,6 @@ function RealApp(){
 
 function AdaptiveDemo(){
   const [size,setSize]=useState("wide");
-  useEffect(()=>{
-    if(matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    const id=setInterval(()=>setSize(current=>demoSizes[(demoSizes.findIndex(item=>item.id===current)+1)%demoSizes.length].id),3000);
-    return()=>clearInterval(id);
-  },[]);
   const current=demoSizes.find(item=>item.id===size);
   return <section id="live-demo" className="adaptive-demo" data-reveal>
     <div className="section-heading"><div><p className="section-kicker">The real application</p><h2>One TUI.<br/>Every terminal size.</h2></div><p>The interface follows the real Ratatui layout: cards reorganize as the terminal changes, keeping every action clear from a compact pane to a full-screen session.</p></div>
@@ -121,14 +120,9 @@ export default function Index(){
         <SoftwareRender/>
       </section>
 
+      <section id="install" className="install" data-reveal><div className="install-copy"><p className="section-kicker">Up and running</p><h2>One command.<br/>Your fleet, in view.</h2><p>Install the current release from the official APT repository. nekoHub is open source and built in public.</p><div className="install-links"><a href="https://awakyy1.github.io/nekohub" target="_blank" rel="noreferrer">APT repository <Arrow/></a><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Read the source <Arrow/></a></div></div><button className="command" onClick={copy} aria-label="Copy install command"><span className="prompt">$</span><code>{content.install}</code><span className={copied?"copy copied":"copy"}>{copied?"Copied":"Copy"}</span></button></section>
+
       <StoryCarousel/>
-
-      <AdaptiveDemo/>
-
-      <section className="feature-stage" data-reveal>
-        <div className="section-heading"><div><p className="section-kicker">Built for the command line</p><h2>Native signals.<br/>No dashboard tax.</h2></div><p>The nekoHub agent reads Linux directly. Metrics stay lightweight, structured, and available without a permanent SSH polling loop.</p></div>
-        <div className="feature-grid"><article className="feature wide"><div className="feature-no">01</div><div className="proc-card"><div><span>/proc/loadavg</span><b>0.42 &nbsp; 0.31 &nbsp; 0.28</b></div><div><span>/sys/class/thermal</span><b>42.0°C</b></div><div><span>/proc/meminfo</span><b>4.2 GB free</b></div></div><h3>Linux-native telemetry</h3><p>Direct reads from <code>/proc</code> and <code>/sys</code> keep the agent transparent and efficient.</p></article><article className="feature"><div className="feature-no">02</div><div className="socket-art"><span>nekoHub</span><i>↔</i><span>agent.sock</span></div><h3>Local by default</h3><p>A Unix socket keeps host communication close, predictable, and easy to reason about.</p></article><article className="feature"><div className="feature-no">03</div><div className="prom-art"><span>GET /metrics</span><b>200 OK</b><code>nekohub_cpu 0.18</code></div><h3>Prometheus ready</h3><p>Use nekoHub's focused TUI and keep the monitoring stack you already trust.</p></article></div>
-      </section>
 
       <section id="agent" className="agent-section" data-reveal>
         <div className="agent-copy"><p className="section-kicker">nekoHub agent</p><h2>A quiet Linux service that does one job well.</h2><p>It reads native system signals, keeps a short local history, and serves the TUI without root privileges. No permanent SSH polling loop, no heavy runtime.</p><a href="https://github.com/awakyy1/nekohub/tree/main/crates/nekohub-agent" target="_blank" rel="noreferrer">Explore the agent source <Arrow/></a></div>
@@ -141,9 +135,9 @@ export default function Index(){
         </div>
       </section>
 
-      <section id="architecture" className="architecture" data-reveal><div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div><div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div></section>
+      <AdaptiveDemo/>
 
-      <section id="install" className="install" data-reveal><div className="install-copy"><p className="section-kicker">Up and running</p><h2>One command.<br/>Your fleet, in view.</h2><p>Install the current release from the official APT repository. nekoHub is open source and built in public.</p><div className="install-links"><a href="https://awakyy1.github.io/nekohub" target="_blank" rel="noreferrer">APT repository <Arrow/></a><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Read the source <Arrow/></a></div></div><button className="command" onClick={copy} aria-label="Copy install command"><span className="prompt">$</span><code>{content.install}</code><span className={copied?"copy copied":"copy"}>{copied?"Copied":"Copy"}</span></button></section>
+      <section id="architecture" className="architecture" data-reveal><div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div><div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div></section>
 
       <section className="final-cta" data-reveal><span className="big-cat">(^._.^)</span><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
     </main>
