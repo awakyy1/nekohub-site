@@ -9,6 +9,7 @@
   --violet: #a888ff;
   --mint: #73efcb;
   --max: 1240px;
+  --nav-height: 76px;
   color-scheme: dark;
 }
 * {
@@ -46,7 +47,7 @@ body:before {
 .nav {
   position: relative;
   overflow: hidden;
-  height: 76px;
+  height: var(--nav-height);
   max-width: var(--max);
   margin: auto;
   display: flex;
@@ -119,8 +120,8 @@ footer a:hover {
   overflow: hidden;
   max-width: var(--max);
   margin: auto;
-  min-height: 790px;
-  padding: 110px 24px 95px;
+  min-height: calc(100svh - var(--nav-height));
+  padding: clamp(64px, 10svh, 110px) 24px clamp(56px, 9svh, 95px);
   display: grid;
   grid-template-columns: 0.84fr 1.16fr;
   align-items: center;
@@ -1041,11 +1042,14 @@ footer a {
   }
 }
 @media (max-width: 620px) {
+  :root {
+    --nav-height: 66px;
+  }
   .nav {
-    height: 66px;
+    height: var(--nav-height);
   }
   .hero {
-    min-height: auto;
+    min-height: calc(100svh - var(--nav-height));
     padding: 65px 18px 75px;
   }
   .hero h1 {
