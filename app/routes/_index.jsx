@@ -8,6 +8,7 @@ import DotField from "../components/DotField";
 import DotGrid from "../components/DotGrid";
 
 const content = { ...fallbackContent, ...(generated || {}) };
+const installCommands = "sudo apt update\nsudo apt install -y curl\ncurl -fsSL https://awakyy1.github.io/nekohub/install.sh | sudo sh\nsudo apt install nekohub";
 const renderHosts = [
   { name:"atlas", cpu:34, mem:46, disk:28, load:"1.12 0.96 0.74", net:"↓86 KB/s  ↑31 KB/s", up:"12d 4h" },
   { name:"boreal", cpu:22, mem:39, disk:35, load:"0.71 0.65 0.52", net:"↓62 KB/s  ↑24 KB/s", up:"8d 19h" },
@@ -124,7 +125,7 @@ function AdaptiveDemo(){
 
 export default function Index(){
   const [copied,setCopied]=useState(false); const [menu,setMenu]=useState(false); const [locale,setLocale]=useState("en"); const [latestVersion,setLatestVersion]=useState("v0.9.0"); const root=useRef(null);
-  const copy=()=>{ navigator.clipboard?.writeText(content.install); setCopied(true); setTimeout(()=>setCopied(false),1800); };
+  const copy=()=>{ navigator.clipboard?.writeText(installCommands); setCopied(true); setTimeout(()=>setCopied(false),1800); };
   useEffect(()=>{const saved=localStorage.getItem("nekohub-locale");if(languageLabels[saved])setLocale(saved)},[]);
   useEffect(()=>{document.documentElement.lang=locale==="pt"?"pt-BR":locale;localStorage.setItem("nekohub-locale",locale);translatePage(root.current,locale)},[locale]);
   useEffect(()=>{ const els=[...document.querySelectorAll("[data-reveal]")]; const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("revealed")),{threshold:.14}); els.forEach(e=>obs.observe(e)); return()=>obs.disconnect(); },[]);
@@ -140,7 +141,7 @@ export default function Index(){
         <SoftwareRender version={latestVersion}/>
       </section>
 
-      <section id="install" className="install dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><div className="install-copy"><p className="section-kicker">Up and running</p><h2>One command.<br/>Your fleet, in view.</h2><p>Install the current release from the official APT repository. nekoHub is open source and built in public.</p><div className="install-links"><a href="https://awakyy1.github.io/nekohub" target="_blank" rel="noreferrer">APT repository <Arrow/></a><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Read the source <Arrow/></a></div></div><button className="command" onClick={copy} aria-label="Copy install command"><span className="prompt">$</span><code>{content.install}</code><span className={copied?"copy copied":"copy"}>{copied?"Copied":"Copy"}</span></button></section>
+      <section id="install" className="install dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><div className="install-copy"><p className="section-kicker">Debian, Ubuntu &amp; derivatives · amd64</p><h2>Install nekoHub.<br/>See your fleet.</h2><p>Configure the official APT repository, then install nekoHub. These commands are for Debian, Ubuntu, and compatible derivatives running on amd64.</p><div className="install-links"><a href="https://awakyy1.github.io/nekohub" target="_blank" rel="noreferrer">APT repository <Arrow/></a><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Read the source <Arrow/></a></div></div><button className="command" onClick={copy} aria-label="Copy installation commands"><span className="prompt">$</span><code>{installCommands}</code><span className={copied?"copy copied":"copy"}>{copied?"Copied":"Copy"}</span></button></section>
 
       <StoryCarousel/>
 
