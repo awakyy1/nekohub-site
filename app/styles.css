@@ -908,11 +908,11 @@ footer a:hover {
 footer {
   position: relative;
   overflow: hidden;
-  max-width: var(--max);
+  width: 100%;
   margin: auto;
   min-height: 130px;
   border-top: 1px solid var(--line);
-  padding: 35px 24px;
+  padding: 35px max(24px, calc((100% - var(--max)) / 2 + 24px));
   display: grid;
   grid-template-columns: 1fr 1fr 1fr;
   align-items: start;
