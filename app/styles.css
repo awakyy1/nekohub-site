@@ -508,11 +508,15 @@ footer a:hover {
   font: 600 10px ui-monospace, SFMono-Regular, Consolas, monospace;
   letter-spacing: 0.12em;
 }
-.adaptive-demo,
-.agent-section {
+.adaptive-demo {
   max-width: var(--max);
   margin: auto;
   padding: 120px 24px;
+}
+.agent-section {
+  width: 100%;
+  margin: auto;
+  padding: 120px max(24px, calc((100% - var(--max)) / 2 + 24px));
 }
 .size-controls { display: flex; justify-content: flex-end; align-items: center; gap: 8px; margin: -35px 0 20px; }
 .size-controls span { margin-right: 8px; color: #626d7d; font: 10px ui-monospace,monospace; text-transform: uppercase; letter-spacing: .1em; }
@@ -583,8 +587,7 @@ footer a:hover {
 .architecture,
 .roadmap,
 .theme-shop,
-.audience,
-.install {
+.audience {
   max-width: var(--max);
   margin: auto;
   padding: 130px 24px;
@@ -836,13 +839,14 @@ footer a:hover {
   margin: 0;
 }
 .install {
+  width: 100%;
   display: grid;
   grid-template-columns: 1fr 1fr;
   gap: 70px;
   align-items: center;
   border-block: 1px solid var(--line);
   margin-top: 120px;
-  padding-block: 110px;
+  padding: 110px max(24px, calc((100% - var(--max)) / 2 + 24px));
 }
 .install h2 {
   font-size: clamp(42px, 5vw, 68px);
@@ -892,7 +896,7 @@ footer a:hover {
 }
 .final-cta {
   text-align: center;
-  padding: 180px 24px;
+  padding: 180px max(24px, calc((100% - var(--max)) / 2 + 24px));
 }
 .big-cat {
   font: 14px ui-monospace, monospace;
