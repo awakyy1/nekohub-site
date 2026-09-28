@@ -24,7 +24,7 @@ const renderThemes = [
   { name:"Violet", primary:"#b484ff", secondary:"#e884d3", tertiary:"#71a5f6", success:"#6fdac1", background:"#0f0a19", surface:"#1c132d", border:"#422f60", text:"#e9e0f7", muted:"#7e6b99" }
 ];
 
-function Logo(){ return <a className="logo ascii-logo" href="#top" aria-label="nekoHub home"><span>/\\</span><b>nekoHub</b><span>/\\</span></a>; }
+function Logo(){ return <a className="logo ascii-logo" href="#top" aria-label="nekoHub home"><pre>{" /\\       __        __ __     __ /\\\n  ___  ___ / /_____  / // /_ __/ /\n / _ \\/ -_)  '_/ _ \\/ _  / // / _ \\\n/_//_/\\__/_/\\_\\\\___/_//_/\\_,_/_.__/"}</pre></a>; }
 function Arrow(){ return <span aria-hidden="true">↗</span>; }
 
 function LanguagePicker({locale,onChange}){
