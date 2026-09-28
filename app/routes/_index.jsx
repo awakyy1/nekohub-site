@@ -17,6 +17,13 @@ const renderHosts = [
   { name:"fjord", cpu:29, mem:43, disk:32, load:"0.94 0.81 0.67", net:"↓73 KB/s  ↑28 KB/s", up:"16d 9h" }
 ];
 
+const renderThemes = [
+  { name:"Sakura", primary:"#ef8bb5", secondary:"#f4ae97", tertiary:"#be9feb", success:"#7cdab5", background:"#140e12", surface:"#22171f", border:"#503345", text:"#f1e0e9", muted:"#916f82" },
+  { name:"Ocean", primary:"#70a6ff", secondary:"#68cde1", tertiary:"#9184ee", success:"#68dab9", background:"#090f1a", surface:"#101c2e", border:"#2a4364", text:"#dae6f7", muted:"#647a97" },
+  { name:"Ember", primary:"#eb6565", secondary:"#f19d5b", tertiary:"#da7289", success:"#7ecf91", background:"#160b0b", surface:"#271413", border:"#5b2d2b", text:"#f4e1da", muted:"#966960" },
+  { name:"Violet", primary:"#b484ff", secondary:"#e884d3", tertiary:"#71a5f6", success:"#6fdac1", background:"#0f0a19", surface:"#1c132d", border:"#422f60", text:"#e9e0f7", muted:"#7e6b99" }
+];
+
 function Logo(){ return <a className="logo" href="#top" aria-label="nekoHub home"><span className="cat">(^._.^)</span><span>nekoHub</span></a>; }
 function Arrow(){ return <span aria-hidden="true">↗</span>; }
 
@@ -27,9 +34,13 @@ function LanguagePicker({locale,onChange}){
 }
 
 function SoftwareRender(){
+  const [themeIndex,setThemeIndex]=useState(0);
+  useEffect(()=>{ const timer=setInterval(()=>setThemeIndex(index=>(index+1)%renderThemes.length),2800); return()=>clearInterval(timer); },[]);
+  const theme=renderThemes[themeIndex];
+  const themeStyle={"--tui-amber":theme.primary,"--tui-orange":theme.secondary,"--tui-cyan":theme.tertiary,"--tui-green":theme.success,"--tui-ink":theme.background,"--tui-surface":theme.surface,"--tui-line":theme.border,"--tui-text":theme.text,"--tui-dim":theme.muted};
   return <div className="terminal-wrap software-render-wrap" aria-label="nekoHub version 0.5.0 demo mode interface">
     <div className="terminal-glow"/>
-    <div className="software-render">
+    <div className="software-render" style={themeStyle}>
       <div className="software-head"><span className="software-logo">/\_/\ <b>nekoHub</b></span><span><b>atlas</b><i>Overview</i><i>Details</i><em>● live</em></span></div>
       <div className="fleet-summary"><strong>FLEET OVERVIEW</strong><div><span>systems</span><b>6 of 6 responding</b><span>load</span><b>35.2% average</b><span>reach</span><b>no unavailable hosts</b><span>risk</span><b>ember · cpu 61%</b></div></div>
       <div className="software-host-grid">{renderHosts.map((host,index)=><article key={host.name} className={index===0?"selected":""}>
@@ -40,18 +51,19 @@ function SoftwareRender(){
         <div className="host-foot"><span>load&nbsp; {host.load}</span><span>net&nbsp;&nbsp; {host.net}</span><span>up&nbsp;&nbsp;&nbsp; {host.up}&nbsp;&nbsp; 19ms</span></div>
       </article>)}</div>
       <div className="software-foot">Esc home · r refresh · m machines · s settings · q quit</div>
-      <span className="source-badge">v0.5.0 · demo mode</span>
+      <div className="render-theme-switcher" data-no-translate>{renderThemes.map((item,index)=><button key={item.name} className={themeIndex===index?"active":""} onClick={()=>setThemeIndex(index)} aria-label={`Use ${item.name} theme`}><i style={{background:item.primary}}/>{item.name}</button>)}</div>
+      <span className="source-badge" data-no-translate>{theme.name} · v0.5.0</span>
     </div>
   </div>;
 }
 
 function StoryCarousel(){
   const [slide,setSlide]=useState(0);
-  const previous=()=>setSlide(current=>current===0?2:current-1);
-  const next=()=>setSlide(current=>(current+1)%3);
+  const previous=()=>setSlide(current=>current===0?3:current-1);
+  const next=()=>setSlide(current=>(current+1)%4);
   return <section id="product" className="story-carousel" data-reveal aria-label="Why nekoHub and who it is for">
     <div className="story-viewport" aria-live="polite">
-      <div className="story-track" style={{transform:`translateX(-${slide*(100/3)}%)`}}>
+      <div className="story-track" style={{transform:`translateX(-${slide*25}%)`}}>
         <article className="story-slide why-slide">
           <p className="section-kicker">01 / Why nekoHub</p>
           <h2>Fleet visibility should feel <em>instant</em>, not like another platform to operate.</h2>
@@ -65,9 +77,13 @@ function StoryCarousel(){
           <div><p className="section-kicker">Built for the command line</p><h2>Native signals.<br/>No dashboard tax.</h2><p>The nekoHub agent reads Linux directly. Metrics stay lightweight, structured, and available without a permanent SSH polling loop.</p></div>
           <div className="signal-stack"><div><span>/proc + /sys</span><strong>Linux-native telemetry</strong></div><div><span>agent.sock</span><strong>Local by default</strong></div><div><span>GET /metrics</span><strong>Prometheus ready</strong></div></div>
         </article>
+        <article className="story-slide architecture-slide">
+          <div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div>
+          <div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div>
+        </article>
       </div>
     </div>
-    <div className="story-controls"><button onClick={previous} aria-label="Previous slide">←</button><span>0{slide+1} / 03</span><div>{[0,1,2].map(index=><button key={index} className={slide===index?"active":""} onClick={()=>setSlide(index)} aria-label={`Show slide ${index+1}`}/>)}</div><button onClick={next} aria-label="Next slide">→</button></div>
+    <div className="story-controls"><button onClick={previous} aria-label="Previous slide">←</button><span>0{slide+1} / 04</span><div>{[0,1,2,3].map(index=><button key={index} className={slide===index?"active":""} onClick={()=>setSlide(index)} aria-label={`Show slide ${index+1}`}/>)}</div><button onClick={next} aria-label="Next slide">→</button></div>
   </section>;
 }
 
@@ -112,7 +128,7 @@ export default function Index(){
   useEffect(()=>{document.documentElement.lang=locale==="pt"?"pt-BR":locale;localStorage.setItem("nekohub-locale",locale);translatePage(root.current,locale)},[locale]);
   useEffect(()=>{ const els=[...document.querySelectorAll("[data-reveal]")]; const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("revealed")),{threshold:.14}); els.forEach(e=>obs.observe(e)); return()=>obs.disconnect(); },[]);
   return <div id="top" className="site-shell" ref={root}>
-    <nav className="nav"><DotField className="nav-dots"/><Logo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#agent">Agent</a><a href="#architecture">Architecture</a><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>≡</button></nav>
+    <nav className="nav"><DotField className="nav-dots"/><Logo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#agent">Agent</a><a href="#product">Architecture</a><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>≡</button></nav>
 
     <main>
       <section className="hero">
@@ -139,9 +155,7 @@ export default function Index(){
 
       <AdaptiveDemo/>
 
-      <section id="architecture" className="architecture dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div><div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div></section>
-
-      <section className="final-cta" data-reveal><span className="big-cat">(^._.^)</span><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
+      <section className="final-cta dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><span className="big-cat">(^._.^)</span><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
     </main>
     <footer><DotField className="footer-dots"/><Logo/><div><a href="https://github.com/awakyy1/nekohub">GitHub</a><a href="https://awakyy1.github.io/nekohub">APT</a><a href="#top">Back to top ↑</a></div></footer>
   </div>;
