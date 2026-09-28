@@ -24,7 +24,7 @@ const renderThemes = [
   { name:"Violet", primary:"#b484ff", secondary:"#e884d3", tertiary:"#71a5f6", success:"#6fdac1", background:"#0f0a19", surface:"#1c132d", border:"#422f60", text:"#e9e0f7", muted:"#7e6b99" }
 ];
 
-function Logo(){ return <a className="logo" href="#top" aria-label="nekoHub home"><span className="cat">(^._.^)</span><span>nekoHub</span></a>; }
+function Logo(){ return <a className="logo ascii-logo" href="#top" aria-label="nekoHub home"><span>/\\</span><b>nekoHub</b><span>/\\</span></a>; }
 function Arrow(){ return <span aria-hidden="true">↗</span>; }
 
 function LanguagePicker({locale,onChange}){
@@ -33,26 +33,27 @@ function LanguagePicker({locale,onChange}){
   return <div className="language"><button data-no-translate aria-label={`${languageLabels[locale]}. Change language`} onClick={next}>{locale==="ja"?"JP":locale.toUpperCase()}</button></div>;
 }
 
-function SoftwareRender(){
+function SoftwareRender({version}){
   const [themeIndex,setThemeIndex]=useState(0);
+  const renderRef=useRef(null);
   useEffect(()=>{ const timer=setInterval(()=>setThemeIndex(index=>(index+1)%renderThemes.length),2800); return()=>clearInterval(timer); },[]);
   const theme=renderThemes[themeIndex];
   const themeStyle={"--tui-amber":theme.primary,"--tui-orange":theme.secondary,"--tui-cyan":theme.tertiary,"--tui-green":theme.success,"--tui-ink":theme.background,"--tui-surface":theme.surface,"--tui-line":theme.border,"--tui-text":theme.text,"--tui-dim":theme.muted};
-  return <div className="terminal-wrap software-render-wrap" aria-label="nekoHub version 0.5.0 demo mode interface">
+  const move=event=>{ const box=event.currentTarget.getBoundingClientRect(); const x=(event.clientX-box.left)/box.width-.5; const y=(event.clientY-box.top)/box.height-.5; renderRef.current?.style.setProperty("--tilt-x",`${y*-3}deg`); renderRef.current?.style.setProperty("--tilt-y",`${x*4}deg`); renderRef.current?.style.setProperty("--render-lift","-2px"); renderRef.current?.style.setProperty("--glare-x",`${(x+.5)*100}%`); renderRef.current?.style.setProperty("--glare-y",`${(y+.5)*100}%`); };
+  const reset=()=>{ renderRef.current?.style.setProperty("--tilt-x","0deg"); renderRef.current?.style.setProperty("--tilt-y","0deg"); renderRef.current?.style.setProperty("--render-lift","0px"); };
+  return <div className="terminal-wrap software-render-wrap" onPointerMove={move} onPointerLeave={reset} aria-label={`nekoHub ${version} interface preview`}>
     <div className="terminal-glow"/>
-    <div className="software-render" style={themeStyle}>
-      <div className="software-head"><span className="software-logo">/\_/\ <b>nekoHub</b></span><span><b>atlas</b><i>Overview</i><i>Details</i><em>● live</em></span></div>
-      <div className="fleet-summary"><strong>FLEET OVERVIEW</strong><div><span>systems</span><b>6 of 6 responding</b><span>load</span><b>35.2% average</b><span>reach</span><b>no unavailable hosts</b><span>risk</span><b>ember · cpu 61%</b></div></div>
-      <div className="software-host-grid">{renderHosts.map((host,index)=><article key={host.name} className={index===0?"selected":""}>
-        <header><strong>{index===0?"▸ ":""}{host.name}</strong><span>· NORMAL</span></header>
-        <p><small>CPU</small><i style={{"--value":`${host.cpu}%`}}/><b>{host.cpu}%</b></p>
-        <p><small>MEM</small><i style={{"--value":`${host.mem}%`}}/><b>{host.mem}%</b></p>
-        <p><small>DSK</small><i style={{"--value":`${host.disk}%`}}/><b>{host.disk}%</b></p>
-        <div className="host-foot"><span>load&nbsp; {host.load}</span><span>net&nbsp;&nbsp; {host.net}</span><span>up&nbsp;&nbsp;&nbsp; {host.up}&nbsp;&nbsp; 19ms</span></div>
-      </article>)}</div>
-      <div className="software-foot">Esc home · r refresh · m machines · s settings · q quit</div>
+    <div ref={renderRef} className="software-render" style={themeStyle}>
+      <span key={themeIndex} className="theme-repaint" aria-hidden="true"/>
+      <div className="software-head latest-head"><pre className="software-wordmark">{" /\\       __        __ __     __ /\\\n  ___  ___ / /_____  / // /_ __/ /\n / _ \\/ -_)  '_/ _ \\/ _  / // / _ \\\n/_//_/\\__/_/\\_\\\\___/_//_/\\_,_/_.__/"}</pre><span><i className="active">[1] Home</i><i>[2] Machines</i><i>[3] Settings</i></span></div>
+      <div className="fleet-pulse"><strong>FLEET PULSE&nbsp; 4</strong><span>● atlas&nbsp; LOCAL AGENT</span><span>○ boreal</span><span>○ cirrus</span><span>○ delta</span><em>0 ALERTS</em></div>
+      <div className="recent-title"><strong>RECENT MACHINES</strong><span>4 registered</span><em>● 4 ready</em></div>
+      <div className="machine-shelf">{renderHosts.slice(0,4).map((host,index)=><article key={host.name} className={index===0?"selected":""}><strong>{host.name}</strong><span>{index===0?"local machine":"agent installed"}</span></article>)}</div>
+      <div className="groups-title"><strong>GROUPS</strong><span>3 spaces</span><em>organize your fleet</em></div>
+      <div className="group-grid"><article className="selected"><strong>◆ homelab</strong><span>2 machines</span><em>● group ready&nbsp;&nbsp; Enter ›</em></article><article><strong>◆ production</strong><span>1 machine</span><em>● group ready</em></article><article><strong>◆ edge</strong><span>1 machine</span><em>● group ready</em></article><article className="add"><strong>+ New group</strong><span>Create a friendly home</span><em>Enter to create</em></article></div>
+      <div className="software-foot">Tab header/cards · ←→ browse · Enter open · m machines · s settings · q quit</div>
       <div className="render-theme-switcher" data-no-translate>{renderThemes.map((item,index)=><button key={item.name} className={themeIndex===index?"active":""} onClick={()=>setThemeIndex(index)} aria-label={`Use ${item.name} theme`}><i style={{background:item.primary}}/>{item.name}</button>)}</div>
-      <span className="source-badge" data-no-translate>{theme.name} · v0.5.0</span>
+      <span className="source-badge" data-no-translate>{theme.name} · {version}</span>
     </div>
   </div>;
 }
@@ -122,19 +123,21 @@ function AdaptiveDemo(){
 }
 
 export default function Index(){
-  const [copied,setCopied]=useState(false); const [menu,setMenu]=useState(false); const [locale,setLocale]=useState("en"); const root=useRef(null);
+  const [copied,setCopied]=useState(false); const [menu,setMenu]=useState(false); const [locale,setLocale]=useState("en"); const [latestVersion,setLatestVersion]=useState("v0.9.0"); const root=useRef(null);
   const copy=()=>{ navigator.clipboard?.writeText(content.install); setCopied(true); setTimeout(()=>setCopied(false),1800); };
   useEffect(()=>{const saved=localStorage.getItem("nekohub-locale");if(languageLabels[saved])setLocale(saved)},[]);
   useEffect(()=>{document.documentElement.lang=locale==="pt"?"pt-BR":locale;localStorage.setItem("nekohub-locale",locale);translatePage(root.current,locale)},[locale]);
   useEffect(()=>{ const els=[...document.querySelectorAll("[data-reveal]")]; const obs=new IntersectionObserver(es=>es.forEach(e=>e.isIntersecting&&e.target.classList.add("revealed")),{threshold:.14}); els.forEach(e=>obs.observe(e)); return()=>obs.disconnect(); },[]);
+  useEffect(()=>{ const controller=new AbortController(); fetch("https://api.github.com/repos/awakyy1/nekohub/releases/latest",{signal:controller.signal,headers:{Accept:"application/vnd.github+json"}}).then(response=>response.ok?response.json():Promise.reject()).then(release=>{ const tag=String(release.tag_name||""); if(/^v?\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(tag)) setLatestVersion(tag.startsWith("v")?tag:`v${tag}`); }).catch(()=>{}); return()=>controller.abort(); },[]);
+  const releaseText=locale==="pt"?`${latestVersion} · disponível via APT`:locale==="ja"?`${latestVersion} · APTで配布中`:`${latestVersion} · now available through APT`;
   return <div id="top" className="site-shell" ref={root}>
     <nav className="nav"><DotField className="nav-dots"/><Logo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#agent">Agent</a><a href="#product">Architecture</a><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>≡</button></nav>
 
     <main>
       <section className="hero">
         <GradientWaves className="hero-waves"/>
-        <div className="hero-copy"><a className="announcement" href="#install"><i/>{content.announcement}<span>→</span></a><p className="eyebrow">{content.eyebrow}</p><h1>{content.title.split("\n").map((line,i)=><span key={line} className={i?"accent-line":""}>{line}</span>)}</h1><p className="hero-intro">{content.intro}</p><div className="hero-actions"><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">View on GitHub <Arrow/></a></div></div>
-        <SoftwareRender/>
+        <div className="hero-copy"><a className="announcement" data-no-translate href="#install">{releaseText}<span>→</span></a><p className="eyebrow">{content.eyebrow}</p><h1>{content.title.split("\n").map((line,i)=><span key={line} className={i?"accent-line":""}>{line}</span>)}</h1><p className="hero-intro">{content.intro}</p><div className="hero-actions"><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">View on GitHub <Arrow/></a></div></div>
+        <SoftwareRender version={latestVersion}/>
       </section>
 
       <section id="install" className="install dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><div className="install-copy"><p className="section-kicker">Up and running</p><h2>One command.<br/>Your fleet, in view.</h2><p>Install the current release from the official APT repository. nekoHub is open source and built in public.</p><div className="install-links"><a href="https://awakyy1.github.io/nekohub" target="_blank" rel="noreferrer">APT repository <Arrow/></a><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Read the source <Arrow/></a></div></div><button className="command" onClick={copy} aria-label="Copy install command"><span className="prompt">$</span><code>{content.install}</code><span className={copied?"copy copied":"copy"}>{copied?"Copied":"Copy"}</span></button></section>
