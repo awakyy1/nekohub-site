@@ -158,7 +158,7 @@ export default function Index(){
 
       <AdaptiveDemo/>
 
-      <section className="final-cta dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><span className="big-cat">(^._.^)</span><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
+      <section className="final-cta dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><Logo/><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
     </main>
     <footer><DotField className="footer-dots"/><Logo/><div><a href="https://github.com/awakyy1/nekohub">GitHub</a><a href="https://awakyy1.github.io/nekohub">APT</a><a href="#top">Back to top ↑</a></div></footer>
   </div>;
