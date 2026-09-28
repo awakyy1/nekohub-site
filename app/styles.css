@@ -48,12 +48,12 @@ body:before {
   position: relative;
   overflow: hidden;
   height: var(--nav-height);
-  max-width: var(--max);
+  width: 100%;
   margin: auto;
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 24px;
+  padding-inline: max(24px, calc((100% - var(--max)) / 2 + 24px));
   border-bottom: 1px solid rgba(255, 255, 255, 0.08);
 }
 .nav > :not(.dot-field) { position: relative; z-index: 1; }
@@ -118,10 +118,10 @@ footer a:hover {
   position: relative;
   isolation: isolate;
   overflow: hidden;
-  max-width: var(--max);
+  width: 100%;
   margin: auto;
   min-height: calc(100svh - var(--nav-height));
-  padding: clamp(64px, 10svh, 110px) 24px clamp(56px, 9svh, 95px);
+  padding: clamp(64px, 10svh, 110px) max(24px, calc((100% - var(--max)) / 2 + 24px)) clamp(56px, 9svh, 95px);
   display: grid;
   grid-template-columns: 0.84fr 1.16fr;
   align-items: center;
