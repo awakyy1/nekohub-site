@@ -3,6 +3,7 @@ import { Link } from "@remix-run/react";
 import generated from "../content/generated";
 import { fallbackContent } from "../content/fallback";
 import { languageLabels, translatePage } from "../content/translations";
+import BrandLogo from "../components/BrandLogo";
 import GradientWaves from "../components/GradientWaves";
 import DotField from "../components/DotField";
 import DotGrid from "../components/DotGrid";
@@ -25,7 +26,6 @@ const renderThemes = [
   { name:"Violet", primary:"#b484ff", secondary:"#e884d3", tertiary:"#71a5f6", success:"#6fdac1", background:"#0f0a19", surface:"#1c132d", border:"#422f60", text:"#e9e0f7", muted:"#7e6b99" }
 ];
 
-function Logo(){ return <a className="logo ascii-logo" href="#top" aria-label="nekoHub home"><pre>{" /\\       __        __ __     __ /\\\n  ___  ___ / /_____  / // /_ __/ /\n / _ \\/ -_)  '_/ _ \\/ _  / // / _ \\\n/_//_/\\__/_/\\_\\\\___/_//_/\\_,_/_.__/"}</pre></a>; }
 function Arrow(){ return <span aria-hidden="true">↗</span>; }
 
 function LanguagePicker({locale,onChange}){
@@ -132,7 +132,7 @@ export default function Index(){
   useEffect(()=>{ const controller=new AbortController(); fetch("https://api.github.com/repos/awakyy1/nekohub/releases/latest",{signal:controller.signal,headers:{Accept:"application/vnd.github+json"}}).then(response=>response.ok?response.json():Promise.reject()).then(release=>{ const tag=String(release.tag_name||""); if(/^v?\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(tag)) setLatestVersion(tag.startsWith("v")?tag:`v${tag}`); }).catch(()=>{}); return()=>controller.abort(); },[]);
   const releaseText=locale==="pt"?`${latestVersion} · disponível via APT`:locale==="ja"?`${latestVersion} · APTで配布中`:`${latestVersion} · now available through APT`;
   return <div id="top" className="site-shell" ref={root}>
-    <nav className="nav"><DotField className="nav-dots"/><Logo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#agent">Agent</a><a href="#product">Architecture</a><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" onClick={()=>setMenu(!menu)}>≡</button></nav>
+    <nav className="nav"><DotField className="nav-dots"/><BrandLogo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#agent">Agent</a><a href="#product">Architecture</a><Link to="/news">News</Link><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" aria-expanded={menu} onClick={()=>setMenu(!menu)}>≡</button></nav>
 
     <main>
       <section className="hero">
@@ -196,8 +196,8 @@ export default function Index(){
         </div>
       </section>
 
-      <section className="final-cta dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><Logo/><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
+      <section className="final-cta dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><BrandLogo/><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
     </main>
-    <footer><DotField className="footer-dots"/><Logo/><div><a href="https://github.com/awakyy1/nekohub">GitHub</a><a href="https://awakyy1.github.io/nekohub">APT</a><a href="#top">Back to top ↑</a></div></footer>
+    <footer><DotField className="footer-dots"/><BrandLogo/><div><a href="https://github.com/awakyy1/nekohub">GitHub</a><a href="https://awakyy1.github.io/nekohub">APT</a><a href="#top">Back to top ↑</a></div></footer>
   </div>;
 }

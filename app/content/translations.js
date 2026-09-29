@@ -1,5 +1,5 @@
 const pt = {
-  "Product":"Produto","Architecture":"Arquitetura","Roadmap":"Roadmap","Install":"Instalar","View on GitHub":"Ver no GitHub",
+  "Product":"Produto","Architecture":"Arquitetura","News":"Notícias","Roadmap":"Roadmap","Install":"Instalar","View on GitHub":"Ver no GitHub",
   "v0.3.1 · now available through APT":"v0.3.1 · disponível via APT","Open source · Rust native · Linux first":"Código aberto · Rust nativo · Feito para Linux",
   "Your Linux fleet,":"Sua frota Linux,","inside the terminal.":"dentro do terminal.","Monitor every machine, organize the noise, and stay close to the systems you run without leaving your keyboard.":"Monitore cada máquina, organize o ruído e fique perto dos sistemas que você administra sem tirar as mãos do teclado.",
   "Install nekoHub":"Instalar nekoHub","01 / Why nekoHub":"01 / Por que nekoHub","Fleet visibility should feel":"Visibilidade da frota deve parecer","instant":"instantânea","not like another platform to operate.":"não outra plataforma para administrar.",
@@ -16,7 +16,7 @@ const pt = {
 };
 
 const ja = {
-  "Product":"プロダクト","Architecture":"構成","Roadmap":"ロードマップ","Install":"インストール","View on GitHub":"GitHubで見る",
+  "Product":"プロダクト","Architecture":"構成","News":"ニュース","Roadmap":"ロードマップ","Install":"インストール","View on GitHub":"GitHubで見る",
   "v0.3.1 · now available through APT":"v0.3.1 · APTで配布中","Open source · Rust native · Linux first":"オープンソース · Rustネイティブ · Linuxファースト","Your Linux fleet,":"Linuxフリートを、","inside the terminal.":"ターミナルの中に。","Monitor every machine, organize the noise, and stay close to the systems you run without leaving your keyboard.":"すべてのマシンを監視し、情報を整理し、キーボードから手を離さずにシステムを管理できます。","Install nekoHub":"nekoHubをインストール",
   "01 / Why nekoHub":"01 / nekoHubを選ぶ理由","Fleet visibility should feel":"フリートの可視化は","instant":"瞬時","not like another platform to operate.":"であるべきです。","nekoHub keeps the experience local, tactile, and fast. One terminal becomes the calm surface between you and every Linux machine you care about.":"nekoHubはローカルで、直感的で、高速。ひとつのターミナルが大切なLinuxマシンをつなぐ静かな操作面になります。",
   "Built for the command line":"コマンドラインのために","Native signals.":"ネイティブな信号。","No dashboard tax.":"ダッシュボード不要。","The nekoHub agent reads Linux directly. Metrics stay lightweight, structured, and available without a permanent SSH polling loop.":"nekoHubエージェントはLinuxを直接読み取ります。常時SSHポーリングなしで軽量なメトリクスを提供します。","Linux-native telemetry":"Linuxネイティブテレメトリ","Local by default":"ローカルが標準","Prometheus ready":"Prometheus対応",
