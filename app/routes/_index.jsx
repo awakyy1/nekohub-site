@@ -66,20 +66,20 @@ function StoryCarousel(){
   return <section id="product" className="story-carousel" data-reveal aria-label="Why nekoHub and who it is for">
     <div className="story-viewport" aria-live="polite">
       <div className="story-track" style={{transform:`translateX(-${slide*25}%)`}}>
-        <article className="story-slide why-slide">
+        <article className={`story-slide why-slide ${slide===0?"active":""}`}>
           <p className="section-kicker">01 / Why nekoHub</p>
           <h2>Fleet visibility should feel <em>instant</em>, not like another platform to operate.</h2>
           <p>nekoHub keeps the experience local, tactile, and fast. One terminal becomes the calm surface between you and every Linux machine you care about.</p>
         </article>
-        <article className="story-slide people-slide">
+        <article className={`story-slide people-slide ${slide===1?"active":""}`}>
           <div><p className="section-kicker">Made for people who run things</p><h2>From one quiet homelab to a fleet of restless VPSs.</h2></div>
           <div className="people-list">{[["Sysadmins","See every host without leaving the terminal."],["Homelabbers","Keep the lab organized, legible, and fun."],["DevOps + SRE","Inspect faster and stay compatible with existing observability."],["Terminal people","Use an interface that respects your keyboard and attention."]].map(([title,copy])=><div key={title}><h3>{title}</h3><p>{copy}</p></div>)}</div>
         </article>
-        <article className="story-slide command-slide">
+        <article className={`story-slide command-slide ${slide===2?"active":""}`}>
           <div><p className="section-kicker">Built for the command line</p><h2>Native signals.<br/>No dashboard tax.</h2><p>The nekoHub agent reads Linux directly. Metrics stay lightweight, structured, and available without a permanent SSH polling loop.</p></div>
           <div className="signal-stack"><div><span>/proc + /sys</span><strong>Linux-native telemetry</strong></div><div><span>agent.sock</span><strong>Local by default</strong></div><div><span>GET /metrics</span><strong>Prometheus ready</strong></div></div>
         </article>
-        <article className="story-slide architecture-slide">
+        <article className={`story-slide architecture-slide ${slide===3?"active":""}`}>
           <div className="section-heading"><div><p className="section-kicker">A cleaner control loop</p><h2>SSH opens the door.<br/>The agent keeps watch.</h2></div><p>Discovery and operations still use SSH. Continuous metrics come from a purpose-built agent, so collection remains stable without holding remote sessions open.</p></div>
           <div className="flow"><div className="flow-node"><small>YOU</small><strong>nekoHub TUI</strong><span>one keyboard-first workspace</span></div><div className="flow-line"><i/><b>SSH · DISCOVER + OPERATE</b><i/></div><div className="flow-node"><small>HOST</small><strong>nekoHub agent</strong><span>native Linux telemetry</span></div><div className="flow-line mint"><i/><b>METRICS · CONTINUOUS</b><i/></div><div className="flow-node compact"><small>EXPORT</small><strong>Prometheus</strong><span>optional, always compatible</span></div></div>
         </article>
@@ -132,7 +132,7 @@ export default function Index(){
   useEffect(()=>{ const controller=new AbortController(); fetch("https://api.github.com/repos/awakyy1/nekohub/releases/latest",{signal:controller.signal,headers:{Accept:"application/vnd.github+json"}}).then(response=>response.ok?response.json():Promise.reject()).then(release=>{ const tag=String(release.tag_name||""); if(/^v?\d+\.\d+\.\d+(?:[-+][0-9A-Za-z.-]+)?$/.test(tag)) setLatestVersion(tag.startsWith("v")?tag:`v${tag}`); }).catch(()=>{}); return()=>controller.abort(); },[]);
   const releaseText=locale==="pt"?`${latestVersion} · disponível via APT`:locale==="ja"?`${latestVersion} · APTで配布中`:`${latestVersion} · now available through APT`;
   return <div id="top" className="site-shell" ref={root}>
-    <nav className="nav"><DotField className="nav-dots"/><BrandLogo/><div className={menu?"nav-links open":"nav-links"}><a href="#product">Product</a><a href="#agent">Agent</a><a href="#product">Architecture</a><Link to="/news">News</Link><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" aria-expanded={menu} onClick={()=>setMenu(!menu)}>≡</button></nav>
+    <nav className="nav"><DotField className="nav-dots"/><BrandLogo/><div id="main-navigation" className={menu?"nav-links open":"nav-links"} onClick={()=>setMenu(false)}><a href="#product">Product</a><a href="#agent">Agent</a><a href="#product">Architecture</a><Link to="/news">News</Link><Link to="/themes">Theme Shop</Link><a href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">GitHub <Arrow/></a></div><div className="nav-actions"><LanguagePicker locale={locale} onChange={setLocale}/><a className="nav-cta" href="#install">Install <span>↘</span></a></div><button className="menu" aria-label="Toggle menu" aria-controls="main-navigation" aria-expanded={menu} onClick={()=>setMenu(!menu)}>{menu?"×":"≡"}</button></nav>
 
     <main>
       <section className="hero">
