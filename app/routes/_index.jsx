@@ -159,6 +159,43 @@ export default function Index(){
 
       <AdaptiveDemo/>
 
+      <section className="newsletter dot-grid-section" data-reveal>
+        <div className="newsletter-inner">
+          <div className="newsletter-copy">
+            <p className="section-kicker">NekoHub Updates</p>
+            <h2>Stay close to<br/><em>what ships next.</em></h2>
+            <p>Release notes, development updates and technical notes from the NekoHub project.</p>
+          </div>
+
+          <form
+            action="https://buttondown.com/api/emails/embed-subscribe/beatriz2"
+            method="post"
+            className="newsletter-form"
+          >
+            <label htmlFor="newsletter-email">Email address</label>
+
+            <div className="newsletter-field">
+              <input
+                id="newsletter-email"
+                type="email"
+                name="email"
+                placeholder="you@example.com"
+                autoComplete="email"
+                required
+              />
+              <input type="hidden" name="embed" value="1" />
+              <button type="submit">
+                Subscribe <span>→</span>
+              </button>
+            </div>
+
+            <p className="newsletter-note">
+              Release updates only · unsubscribe anytime
+            </p>
+          </form>
+        </div>
+      </section>
+
       <section className="final-cta dot-grid-section" data-reveal><DotGrid className="section-dot-grid"/><Logo/><h2>Linux fleet management,<br/><em>designed for the terminal.</em></h2><div><a className="primary" href="#install">Install nekoHub <span>↘</span></a><a className="secondary" href="https://github.com/awakyy1/nekohub" target="_blank" rel="noreferrer">Star on GitHub <Arrow/></a></div></section>
     </main>
     <footer><DotField className="footer-dots"/><Logo/><div><a href="https://github.com/awakyy1/nekohub">GitHub</a><a href="https://awakyy1.github.io/nekohub">APT</a><a href="#top">Back to top ↑</a></div></footer>
