@@ -6,7 +6,6 @@ import NewsHeader from "../components/NewsHeader";
 import { newsPosts } from "../content/news";
 
 const GITHUB_ISSUES = "https://api.github.com/repos/awakyy1/nekohub-site/issues?state=closed&per_page=100";
-const POST_URL = "https://github.com/awakyy1/nekohub-site/issues/new?template=news.yml";
 
 function issueField(body, label) {
   const match = body.match(new RegExp(`### ${label}\\s*\\n+([\\s\\S]*?)(?=\\n### |$)`, "i"));
@@ -76,7 +75,6 @@ export default function News() {
           <p className="section-kicker">NEKOHUB / NEWS</p>
           <h1>Updates from<br /><em>the terminal.</em></h1>
           <p>Release notes, product updates, and field notes from nekoHub.</p>
-          <a className="news-write-button" href={POST_URL} target="_blank" rel="noreferrer">Write an update <span aria-hidden="true">↗</span></a>
         </header>
 
         {featured ? (
@@ -104,7 +102,7 @@ export default function News() {
             </section>
           </>
         ) : (
-          <p className="news-empty">There are no updates yet. Use “Write an update” to publish the first one.</p>
+          <p className="news-empty">There are no updates yet.</p>
         )}
       </main>
       <footer><DotField className="footer-dots"/><BrandLogo/><p>Linux fleet management, designed for the terminal.</p><div><Link to="/">Home</Link><a href="https://github.com/awakyy1/nekohub">GitHub</a><a href="https://awakyy1.github.io/nekohub">APT</a><a href="#top">Back to top ↑</a></div></footer>
