@@ -1,0 +1,25 @@
+name: Publish owner news updates
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  issues: write
+
+jobs:
+  publish:
+    if: github.event.issue.author_association == 'OWNER' && startsWith(github.event.issue.title, 'News:')
+    runs-on: ubuntu-latest
+    steps:
+      - name: Publish update
+        uses: actions/github-script@v7
+        with:
+          script: |
+            await github.rest.issues.update({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              issue_number: context.issue.number,
+              state: 'closed',
+              state_reason: 'completed'
+            });

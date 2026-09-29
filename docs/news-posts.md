@@ -1,16 +1,13 @@
-# Publishing nekoHub news
+# Publishing a nekoHub update
 
-The News page is driven by `app/content/news.js`. Add each new post to the top
-of the `newsPosts` array, then build and deploy the site. No external CMS account
-is needed.
+You do not need to edit code to publish a news post.
 
-Each post has a unique `slug`, an ISO date (`YYYY-MM-DD`), category, version,
-title, summary, GitHub release URL, and a `body` array. Body blocks support:
+1. Open the site's [News page](https://nekohub.beatrizakemi040.chatgpt.site/news).
+2. Select **Write an update** and sign in to GitHub if asked.
+3. Fill in the title, category, version, summary, and full content. A release link is optional.
+4. Select **Submit new issue**.
 
-- `{ type: "paragraph", text: "..." }`
-- `{ type: "heading", text: "..." }`
-- `{ type: "code", text: "..." }`
-- `{ type: "link", text: "...", href: "/path" }`
-
-The first post in the array is featured on `/news`; all posts also have their
-own page at `/news/<slug>`.
+The post is published automatically on the News page. The date is filled in
+automatically. Posts submitted by anyone other than the repository owner are
+not published. The form opens on GitHub, but visitors read the finished post
+on the nekoHub site.

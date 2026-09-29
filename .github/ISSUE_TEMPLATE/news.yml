@@ -1,0 +1,57 @@
+name: News update
+description: Write a nekoHub update for the News page
+title: "News: Update"
+body:
+  - type: markdown
+    attributes:
+      value: "Fill in the fields below. Owner-submitted updates are published automatically on the nekoHub News page."
+  - type: dropdown
+    id: category
+    attributes:
+      label: Category
+      options:
+        - Release
+        - Product update
+        - Project news
+    validations:
+      required: true
+  - type: input
+    id: update-title
+    attributes:
+      label: Title
+      description: The headline shown on the News page.
+      placeholder: "nekoHub v0.14.0 is now available"
+    validations:
+      required: true
+  - type: input
+    id: version
+    attributes:
+      label: Version
+      description: "For example: v0.14.0, or nekoHub"
+      placeholder: "v0.14.0"
+    validations:
+      required: true
+  - type: textarea
+    id: summary
+    attributes:
+      label: Summary
+      description: A short sentence shown in the News list.
+      placeholder: What changed or why is this update useful?
+    validations:
+      required: true
+  - type: textarea
+    id: content
+    attributes:
+      label: Content
+      description: Write the full update. Separate paragraphs with a blank line.
+      placeholder: Share the details of this update.
+    validations:
+      required: true
+  - type: input
+    id: release
+    attributes:
+      label: Release link
+      description: Optional link to a GitHub release or related page.
+      placeholder: "https://github.com/awakyy1/nekohub/releases"
+    validations:
+      required: false
