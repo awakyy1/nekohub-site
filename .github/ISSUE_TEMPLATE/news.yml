@@ -5,16 +5,6 @@ body:
   - type: markdown
     attributes:
       value: "Fill in the fields below. Owner-submitted updates are published automatically on the nekoHub News page."
-  - type: dropdown
-    id: category
-    attributes:
-      label: Category
-      options:
-        - Release
-        - Product update
-        - Project news
-    validations:
-      required: true
   - type: input
     id: update-title
     attributes:

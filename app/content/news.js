@@ -4,7 +4,6 @@ export const newsPosts = [
   {
     slug: "nekohub-0-13-0",
     date: "2026-09-28",
-    category: "Release",
     version: "v0.13.0",
     title: "nekoHub v0.13.0 is now available",
     summary: "The latest stable build is published for Debian, Ubuntu, and compatible amd64 distributions through the official APT repository.",
@@ -19,7 +18,6 @@ export const newsPosts = [
   {
     slug: "embedded-ssh-terminal",
     date: "2026-09-28",
-    category: "Release",
     version: "v0.12.0",
     title: "Open an SSH terminal from nekoHub",
     summary: "The v0.12.0 release adds an embedded SSH terminal, bringing remote shell access into the nekoHub workflow.",

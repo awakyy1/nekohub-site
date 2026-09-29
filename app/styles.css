@@ -961,9 +961,7 @@ footer a {
 .news-featured { position: relative; isolation: isolate; min-height: 350px; padding: clamp(26px,5vw,54px); border: 1px solid #2a3342; border-radius: 14px; overflow: hidden; background: radial-gradient(ellipse at 88% 4%,rgba(125,162,255,.12),transparent 40%),linear-gradient(135deg,#0c111a,#090c12 70%); }
 .news-featured:after { content: ""; position: absolute; z-index: -1; inset: 0; opacity: .1; pointer-events: none; background-image: radial-gradient(#94a5c1 1px,transparent 1px); background-size: 20px 20px; mask-image: linear-gradient(115deg,transparent 36%,black 100%); }
 .news-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 12px; color: #748093; font: 11px ui-monospace,monospace; }
-.news-category { padding: 5px 8px; border: 1px solid rgba(168,136,255,.36); border-radius: 5px; color: #baa2ff; text-transform: uppercase; letter-spacing: .08em; }
-.news-overline { margin: 54px 0 10px; color: #738199; font: 10px ui-monospace,monospace; letter-spacing: .16em; }
-.news-featured h3 { max-width: 740px; margin: 0; font-size: clamp(32px,5vw,58px); line-height: 1.05; letter-spacing: -.05em; font-weight: 610; }
+.news-featured h3 { max-width: 740px; margin: 64px 0 0; font-size: clamp(32px,5vw,58px); line-height: 1.05; letter-spacing: -.05em; font-weight: 610; }
 .news-featured h3 a,.news-row h3 a { color: #f0f3f9; text-decoration: none; transition: color .2s; }
 .news-featured h3 a:hover,.news-row h3 a:hover { color: #b7c7ff; }
 .news-summary { max-width: 690px; color: #939eae; font-size: 16px; line-height: 1.7; }
@@ -997,8 +995,7 @@ footer a {
   .news-intro > p:last-child { font-size: 16px; }
   .news-latest,.news-archive { padding-top: 38px; }
   .news-featured { min-height: 0; padding: 24px 20px 30px; }
-  .news-overline { margin-top: 40px; }
-  .news-featured h3 { font-size: 34px; }
+  .news-featured h3 { margin-top: 40px; font-size: 34px; }
   .news-row { grid-template-columns: 1fr 24px; gap: 13px; padding: 22px 0; }
   .news-row .news-meta { grid-column: 1; grid-row: 1; flex-direction: row; flex-wrap: wrap; align-items: center; }
   .news-row > div { grid-column: 1; grid-row: 2; }

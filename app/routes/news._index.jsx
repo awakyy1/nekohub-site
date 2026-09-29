@@ -28,7 +28,6 @@ function issuePost(issue) {
   return {
     slug: `github-${issue.number}`,
     date,
-    category: issueField(body, "Category") || "Update",
     version: issueField(body, "Version") || "nekoHub",
     title: issueField(body, "Title") || issue.title.replace(/^News:\s*/i, ""),
     summary: issueField(body, "Summary"),
@@ -47,7 +46,7 @@ function formatDate(date) {
 }
 
 function PostMeta({ post }) {
-  return <div className="news-meta"><span className="news-category">{post.category}</span><span>{post.version}</span><time dateTime={post.date}>{formatDate(post.date)}</time></div>;
+  return <div className="news-meta"><span>{post.version}</span><time dateTime={post.date}>{formatDate(post.date)}</time></div>;
 }
 
 export default function News() {
@@ -83,7 +82,6 @@ export default function News() {
               <div className="news-section-label"><h2 id="latest-update-heading">Latest update</h2><span>01 / {String(posts.length).padStart(2, "0")}</span></div>
               <article className="news-featured">
                 <PostMeta post={featured} />
-                <p className="news-overline">NEKOHUB RELEASE</p>
                 <h3><Link to={`/news/${featured.slug}`}>{featured.title}</Link></h3>
                 <p className="news-summary">{featured.summary}</p>
                 <Link className="news-read" to={`/news/${featured.slug}`}>Read update <span aria-hidden="true">↗</span></Link>

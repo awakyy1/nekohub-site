@@ -49,7 +49,6 @@ export default function NewsPost() {
           setRemotePost({
             slug,
             date: issue.closed_at?.slice(0, 10) || issue.created_at.slice(0, 10),
-            category: field("Category") || "Update",
             version: field("Version") || "nekoHub",
             title: field("Title") || issue.title.replace(/^News:\s*/i, ""),
             summary: field("Summary"),
@@ -71,7 +70,7 @@ export default function NewsPost() {
         {post ? <article className="news-article">
           <Link className="news-back" to="/news">← All updates</Link>
           <div className="news-article-heading">
-            <div className="news-meta"><span className="news-category">{post.category}</span><span>{post.version}</span><time dateTime={post.date}>{formatDate(post.date)}</time></div>
+            <div className="news-meta"><span>{post.version}</span><time dateTime={post.date}>{formatDate(post.date)}</time></div>
             <h1>{post.title}</h1>
             <p className="news-summary">{post.summary}</p>
           </div>
